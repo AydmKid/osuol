@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="security_emp_exit_enter_action" model="ir.actions.act_window">
+        <field name="name">Employee Exit and Enter</field>
+        <field name="res_model">osoul.security.emp.exit.enter</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="security_emp_exit_enter_tree" model="ir.ui.view">
+        <field name="name">security_emp_exit_enter</field>
+        <field name="model">osoul.security.emp.exit.enter</field>
+        <field name="arch" type="xml">
+            <tree default_order="create_date desc" 
+            decoration-warning="state == 'outside_osoul'" 
+            decoration-success="state == 'inside_osoul'" sample = "1">
+                <field name="record_no"/>
+                <field name="emp_name_id"/>
+                <field name="emp_id_no"/>
+                <field name="emp_department_id"/>
+                <!-- <field name="emp_phone"/> -->
+                <field name="exit_type"/>
+                <field name="time_out"/>
+                <field name="exit_gate_id"/>
+                <field name="guard_in_exiting_id"/>
+                <field name="time_in"/>
+                <field name="entry_gate_id"/>
+                <field name="guard_in_entry_id"/>
+                <field name="time_spent_outsidee"/>
+                <!-- <field name="progress" widget="progressbar" width=".8"/> -->
+                <field name="state" widget="badge" decoration-warning="state == 'outside_osoul'" decoration-success="state == 'inside_osoul'" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="security_emp_exit_enter_form" model="ir.ui.view">
+        <field name="name">security_emp_exit_enter</field>
+        <field name="model">osoul.security.emp.exit.enter</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <header>
+                    <field name="state" widget="statusbar" decoration-warning="state == 'outside_osoul'" decoration-success="state == 'inside_osoul'" />
+                    <button name="action_button_outside_osoul" class="btn-danger" states="draft" type="object" string="Go Outside" confirm="Are You Sure ?"/>
+                    <button name="action_button_inside_osoul" class="btn-success" states="outside_osoul" type="object" string="Go Inside" confirm="Are You Sure ?"/>
+                </header>
+                <sheet>
+                    <div>
+                        <h4>
+                            <field name="record_no" readonly="1" />
+                        </h4>
+                        <h3>
+                            <field name="emp_name_id" readonly="1" />
+                        </h3>
+                    </div>
+                    <group name="name" string="">
+                        <group name="name" string="Employee Information">
+                            <!-- <field name="record_no" readonly="1" /> -->
+                            <field name="emp_name_id" placeholder="Choose Employee Name" options="{'no_open': True, 'no_create': True}" attrs="{'required':[('state','in',['draft'])],'readonly':[('state','not in',['draft'])]}" />
+                            <field name="emp_id_no" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="emp_department_id" options="{'no_open': True, 'no_create': True}"/>
+                            <!-- <field name="emp_phone" options="{'no_open': True, 'no_create': True}"/> -->
+                        </group>
+                        <group name="name" string="">
+                                   
+                        </group>
+                        <group name="name" string="Exit and Timing Informations">
+                            <field name="exit_type" placeholder="Choose Exit Type" options="{'no_open': True, 'no_create': True}" attrs="{'required': [('state', 'in', ['draft'])], 'readonly': [('state', 'not in', ['draft'])]}" />
+                            <field name="exit_gate_id" widget="selection" placeholder="Choose Exit Gate" attrs="{'required':[('state','in',['draft'])],'readonly':[('state','not in',['draft'])]}" />
+                            <field name="time_out" />
+                            <field name="guard_in_exiting_id" readonly="1" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="time_spent_outsidee" />
+                        </group>
+                        <group name="name" string="Enter and Timing Informations">
+                            <field name="entry_gate_id" widget="selection" placeholder="Choose Entry Gate" attrs="{'required':[('state','in',['outside_osoul'])],'readonly':[('state','not in',['outside_osoul'])]}"/>
+                            <field name="time_in" />
+                            <field name="guard_in_entry_id" readonly="1" options="{'no_open': True, 'no_create': True}"/>     
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="security_emp_exit_enter_menu" model="ir.ui.menu">
+        <field name="name">Exit and Entry</field>
+        <field name="sequence" eval="1" />
+        <field name="action" ref="security_emp_exit_enter_action" />
+        <field name="parent_id" ref="security_guards_emp_enter_exit_menu" />
+    </record>
+
+</odoo>
